@@ -1,7 +1,7 @@
 let fields = [
     null, null, null,
-    null, 'cross', null,
-    'circle', null, null
+    null, null, null,
+    null, null, null
 ];
 
 function init() {
@@ -21,13 +21,24 @@ function render() {
         } else if (fields[i] === 'circle') {
             cellValue = generateCircleSVG();
         }
-        table += `<td>${cellValue}</td>`;
+        table += `<td onclick="makeMove(this, ${i})">${cellValue}</td>`;
         if (i % 3 === 2) {
             table += '</tr>';
         }
     }
     table += '</table>';
     content.innerHTML = table;
+}
+
+let currentPlayer = 'circle';
+
+function makeMove(tdElement, index) {
+    if (fields[index] === null) {
+        fields[index] = currentPlayer;
+        tdElement.innerHTML = currentPlayer === 'circle' ? generateCircleSVG() : generateCrossSVG();
+        tdElement.removeAttribute('onclick');
+        currentPlayer = currentPlayer === 'circle' ? 'cross' : 'circle';
+    }
 }
 
 function generateCircleSVG() {
@@ -80,9 +91,3 @@ function generateCrossSVG() {
     `;
     return svgCrossHtml;
 }
-
-// document.addEventListener('DOMContentLoaded', () => {
-//     const svgContent = generateCircleSVG();
-//     const targetElement = document.getElementById('myTargetElement');
-//     targetElement.innerHTML = svgContent;
-// });

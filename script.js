@@ -17,9 +17,9 @@ function render() {
         }
         let cellValue = '';
         if (fields[i] === 'cross') {
-            cellValue = 'X';
+            cellValue = generateCrossSVG();
         } else if (fields[i] === 'circle') {
-            cellValue = 'O';
+            cellValue = generateCircleSVG();
         }
         table += `<td>${cellValue}</td>`;
         if (i % 3 === 2) {
@@ -29,3 +29,60 @@ function render() {
     table += '</table>';
     content.innerHTML = table;
 }
+
+function generateCircleSVG() {
+    const svgCircleHtml = `
+        <svg width="70" height="70" viewBox="0 0 70 70">
+            <circle cx="35" cy="35" r="30" fill="none" stroke="#00B0EF" stroke-width="6"></circle>
+        </svg>
+        <style>
+            @keyframes fillCircle {
+                from {
+                    stroke-dashoffset: 188.4; // Der Umfang des Kreises
+                }
+                to {
+                    stroke-dashoffset: 0;
+                }
+            }
+
+            svg circle {
+                stroke-dasharray: 188.4;
+                stroke-dashoffset: 188.4;
+                animation: fillCircle 1s ease-out forwards;
+            }
+        </style>
+    `;
+    return svgCircleHtml;
+}
+
+function generateCrossSVG() {
+    const svgCrossHtml = `
+        <svg width="70" height="70" viewBox="0 0 70 70">
+            <line x1="10" y1="10" x2="60" y2="60" stroke="#FFC000" stroke-width="6" stroke-linecap="round"></line>
+            <line x1="60" y1="10" x2="10" y2="60" stroke="#FFC000" stroke-width="6" stroke-linecap="round"></line>
+        </svg>
+        <style>
+            @keyframes drawLine {
+                from {
+                    stroke-dashoffset: 70.71; // Länge einer Linie des Kreuzes (Wurzel aus 2 * 50)
+                }
+                to {
+                    stroke-dashoffset: 0;
+                }
+            }
+
+            svg line {
+                stroke-dasharray: 70.71;
+                stroke-dashoffset: 70.71;
+                animation: drawLine 1s ease-out forwards;
+            }
+        </style>
+    `;
+    return svgCrossHtml;
+}
+
+// document.addEventListener('DOMContentLoaded', () => {
+//     const svgContent = generateCircleSVG();
+//     const targetElement = document.getElementById('myTargetElement');
+//     targetElement.innerHTML = svgContent;
+// });

@@ -44,4 +44,29 @@ tr:last-child td {
     border-bottom: 0;
 }
 
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mt-64 {
+    margin-top: 64px;
+}
+
+.button {
+    padding: 16px 32px;
+    border-radius: 25px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+}
+
+.button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+}
+
 

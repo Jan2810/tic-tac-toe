@@ -3,6 +3,7 @@ let fields = [
     null, null, null,
     null, null, null
 ];
+let gameOver = false;
 
 function init() {
     render();
@@ -33,16 +34,24 @@ function render() {
 let currentPlayer = 'circle';
 
 function handleClick(tdElement, index) {
-    if (fields[index] === null) {
+    if (!gameOver && fields[index] === null) {
         fields[index] = currentPlayer;
         tdElement.innerHTML = currentPlayer === 'circle' ? generateCircleSVG() : generateCrossSVG();
         tdElement.removeAttribute('onclick');
         if (checkGameOver(index)) {
-            setTimeout(() => alert(`${currentPlayer === 'circle' ? 'Circle' : 'Cross'} wins!`), 1000);
+            setTimeout(() => {
+                // alert(`${currentPlayer === 'circle' ? 'Circle' : 'Cross'} wins!`);
+                document.getElementById('restart').style.display = 'block';
+            }, 1000);
+            gameOver = true;
             return;
         }
         if (fields.every(field => field !== null)) {
-            setTimeout(() => alert(`It's a draw!`), 1000);
+            setTimeout(() => {
+                alert(`It's a draw!`);
+                document.getElementById('restart').style.display = 'block';
+            }, 1000);
+            gameOver = true;
             return;
         }
         currentPlayer = currentPlayer === 'circle' ? 'cross' : 'circle';
@@ -86,6 +95,19 @@ function drawWinningLine(combination) {
     line.style.top = `${rectA.top + rectA.height / 2}px`;
 
     document.body.appendChild(line);
+}
+
+function restartGame() {
+    fields = [
+        null, null, null,
+        null, null, null,
+        null, null, null
+    ];
+    gameOver = false;
+    currentPlayer = 'circle';
+    document.getElementById('restart').style.display = 'none';
+    document.querySelectorAll('div[style*="position: absolute"]').forEach(line => line.remove());
+    render();
 }
 
 function generateCircleSVG() {

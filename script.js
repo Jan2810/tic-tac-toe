@@ -21,7 +21,7 @@ function render() {
         } else if (fields[i] === 'circle') {
             cellValue = generateCircleSVG();
         }
-        table += `<td onclick="makeMove(this, ${i})">${cellValue}</td>`;
+        table += `<td onclick="handleClick(this, ${i})">${cellValue}</td>`;
         if (i % 3 === 2) {
             table += '</tr>';
         }
@@ -32,13 +32,60 @@ function render() {
 
 let currentPlayer = 'circle';
 
-function makeMove(tdElement, index) {
+function handleClick(tdElement, index) {
     if (fields[index] === null) {
         fields[index] = currentPlayer;
         tdElement.innerHTML = currentPlayer === 'circle' ? generateCircleSVG() : generateCrossSVG();
         tdElement.removeAttribute('onclick');
+        if (checkGameOver(index)) {
+            setTimeout(() => alert(`${currentPlayer === 'circle' ? 'Circle' : 'Cross'} wins!`), 1000);
+            return;
+        }
+        if (fields.every(field => field !== null)) {
+            setTimeout(() => alert(`It's a draw!`), 1000);
+            return;
+        }
         currentPlayer = currentPlayer === 'circle' ? 'cross' : 'circle';
     }
+}
+
+function checkGameOver(index) {
+    const winningCombinations = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],
+        [0, 4, 8], [2, 4, 6]
+    ];
+    for (const combination of winningCombinations) {
+        const [a, b, c] = combination;
+        if (fields[a] && fields[a] === fields[b] && fields[a] === fields[c]) {
+            drawWinningLine(combination);
+            return true;
+        }
+    }
+    return false;
+}
+
+function drawWinningLine(combination) {
+    const [a, b, c] = combination;
+    const table = document.querySelector('table');
+    const tdA = table.getElementsByTagName('td')[a];
+    const tdC = table.getElementsByTagName('td')[c];
+
+    const rectA = tdA.getBoundingClientRect();
+    const rectC = tdC.getBoundingClientRect();
+
+    const line = document.createElement('div');
+    line.style.position = 'absolute';
+    line.style.backgroundColor = 'white';
+    line.style.height = '6px';
+    line.style.zIndex = '10';
+    line.style.width = `${Math.sqrt(Math.pow(rectC.left - rectA.left, 2) + Math.pow(rectC.top - rectA.top, 2))}px`;
+    line.style.transformOrigin = '0 0';
+    line.style.transform = `rotate(${Math.atan2(rectC.top - rectA.top, rectC.left - rectA.left) * 180 / Math.PI}deg)`;
+    line.style.left = `${rectA.left + rectA.width / 2}px`;
+    line.style.top = `${rectA.top + rectA.height / 2}px`;
+
+    document.body.appendChild(line);
 }
 
 function generateCircleSVG() {

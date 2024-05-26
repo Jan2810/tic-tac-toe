@@ -57,7 +57,7 @@ tr:last-child td {
 .button {
     padding: 16px 32px;
     border-radius: 25px;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(211, 34, 34, 0.4);
     border: none;
     color: white;
     font-family: 'Open Sans', sans-serif;
@@ -65,7 +65,7 @@ tr:last-child td {
 }
 
 .button:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(211, 34, 34, 0.2);
     cursor: pointer;
 }
 
